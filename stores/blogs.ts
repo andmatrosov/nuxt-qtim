@@ -48,17 +48,21 @@ export const useBlogsStore = defineStore('blogs', {
         updateImages () {
             this.articles = this.articles.map(article => {
                 let tempImage;
+                const replaceURL = (url: string) => {
+                    tempImage = article.image.replace(url, '')
+                }
+
                 if(article.image.startsWith('http://lorempixel.com/')){
-                    tempImage = article.image.replace('http://lorempixel.com/', '').split('/').slice(0,2).join('/')
+                    replaceURL('http://lorempixel.com/')
                 } else if(article.image.startsWith('http://placeimg.com/')) {
-                    tempImage = article.image.replace('http://placeimg.com/', '').split('/').slice(0,2).join('/')
+                    replaceURL('http://placeimg.com/')
                 } else {
                     tempImage = null
                 }
 
                 return {
                     ...article,
-                    image: tempImage ? `https://picsum.photos/id/${Number(article.id) + 10}/` + tempImage : article.image
+                    image: tempImage ? `https://loremflickr.com/${tempImage}?random=${article.id}`   : article.image
                 }
             })
         },
